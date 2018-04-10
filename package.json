@@ -17,6 +17,7 @@
   },
   "homepage": "https://github.com/dibidave/dijible-lib-js#readme",
   "dependencies": {
+    "bcryptjs": "^2.4.3",
     "bunyan": "^1.8.12",
     "dateformat": "^3.0.3",
     "inquirer": "^5.2.0",

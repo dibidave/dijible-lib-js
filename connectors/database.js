@@ -8,18 +8,32 @@ module.exports = {
     logger.info("Connecting to '" + url + "'");
 
     var promise = MongoClient.connect(url)
-    .then(function(client_connection) {
+    .then(function(response) {
 
-      client_connection = client_connection;
+      client_connection = response;
 
-      db = client_connection.db("dijible");
+      dbs["root"] = client_connection.db("dijible");
 
+      return dbs["root"].collection("Users").find({}).toArray();
+    }).then(function(users) {
+
+      for(var user_index = 0; user_index < users.length;
+        user_index++) {
+
+        var user = users[user_index];
+
+        var user_id = user._id.toHexString();
+
+        dbs[user_id] = client_connection.db(user_id);
+      }
     });
 
     return promise;
   },
 
-  insert: function(collection_name, object) {
+  insert: function(user_id, collection_name, object) {
+
+    var db = get_db(user_id);
 
     var collection = db.collection(collection_name);
 
@@ -42,7 +56,9 @@ module.exports = {
     return promise;
   },
 
-  update: function(collection_name, id, object) {
+  update: function(user_id, collection_name, id, object) {
+
+    var db = get_db(user_id);
     
     var collection = db.collection(collection_name);
 
@@ -68,7 +84,9 @@ module.exports = {
     return promise;
   },
 
-  get_objects: function(collection_name, filter) {
+  get_objects: function(user_id, collection_name, filter) {
+
+    var db = get_db(user_id);
 
     var collection = db.collection(collection_name);
 
@@ -92,7 +110,9 @@ module.exports = {
     return promise;
   },
 
-  get_object_by_id: function(collection_name, id) {
+  get_object_by_id: function(user_id, collection_name, id) {
+
+    var db = get_db(user_id);
 
     var collection = db.collection(collection_name);
 
@@ -103,7 +123,9 @@ module.exports = {
     return promise;
   },
 
-  delete_objects: function(collection_name, filter) {
+  delete_objects: function(user_id, collection_name, filter) {
+
+    var db = get_db(user_id);
 
     var collection = db.collection(collection_name);
 
@@ -131,6 +153,27 @@ module.exports = {
 var MongoClient = require("mongodb").MongoClient;
 var ObjectID = require("mongodb").ObjectID;
 var client_connection = null;
-var db = null;
+var dbs = {};
 var logger = require("../util/logger").get_logger("database");
 var config = require("../config/config");
+
+var get_db = function(user_id) {
+
+  try {
+    user_id = user._id.toHexString();
+  }
+  catch(e) {
+
+  }
+
+  var db = null;
+
+  if(user_id === null) {
+    db = dbs["root"];
+  }
+  else {
+    db = dbs[user_id];
+  }
+
+  return db;
+};

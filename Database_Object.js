@@ -11,14 +11,17 @@ const Database_Object = {
     var collection_name = this._metadata.collection_name;
 
     if(this._id === undefined) {
-      promise = database.insert(collection_name, this.to_JSON())
+      promise = database.insert(this._metadata.user_id, collection_name,
+        this.to_JSON())
       .then(function(sample_id) {
         self._id = sample_id;
         return self;
       });
     }
     else {
-      promise = database.update(collection_name, this._id, this.to_JSON())
+      promise = database.update(this._metadata.user_id, collection_name,
+        this._id,
+        this.to_JSON())
       .then(function() {
         return self;
       });
@@ -53,11 +56,12 @@ const Database_Object = {
   }
 };
 
-module.exports.create_database_object = function(collection_name) {
+module.exports.create_database_object = function(user_id, collection_name) {
 
   var database_object = Object.assign({}, Database_Object);
   database_object._metadata = {
-    collection_name: collection_name
+    collection_name: collection_name,
+    user_id: user_id
   };
 
   return database_object;

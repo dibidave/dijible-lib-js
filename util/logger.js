@@ -15,7 +15,7 @@ Email_Stream.write = function(object) {
 
   var subject = null;
 
-  subject = "SCRAP Error";
+  subject = "Dijible Error";
 
   sendmail({
     from: config.log_sender_email,
@@ -80,7 +80,7 @@ exports.init_logger = function(new_process_name) {
     ]
   });
 
-  parent_logger.info("dijido " + new_process_name + " log initialized, version " + package_info.version);
+  parent_logger.info("Dijible " + new_process_name + " log initialized, version " + package_info.version);
 
   process_logger = parent_logger.child({module_name: process_name});
 
