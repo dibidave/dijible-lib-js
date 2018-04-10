@@ -1,5 +1,5 @@
-var logger = require("dijible-lib/util/logger").init_logger("create_user");
-var database = require("dijible-lib/connectors/database");
+var logger = require("../util/logger").init_logger("create_user");
+var database = require("../connectors/database");
 var User = require("../User");
 
 var connection_promises = [];
