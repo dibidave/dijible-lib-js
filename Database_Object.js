@@ -64,6 +64,9 @@ module.exports.create_database_object = function(user_id, collection_name) {
     user_id: user_id
   };
 
+  this.created_on = new Date();
+  this.deleted_on = null;
+
   return database_object;
 };
 

@@ -38,7 +38,8 @@ module.exports = {
     var collection = db.collection(collection_name);
 
     for(var property in object) {
-      if(property.endsWith("_id")) {
+      if(property.endsWith("_id")
+         && object[property] !== null && object[property] !== undefined) {
         try {
           object[property] = ObjectID(object[property]);
         }
@@ -65,7 +66,8 @@ module.exports = {
     id = ObjectID(id);
 
     for(var property in object) {
-      if(property.endsWith("_id")) {
+      if(property.endsWith("_id")
+         && object[property] !== null && object[property] !== undefined) {
         try {
           object[property] = ObjectID(object[property]);
         }
@@ -91,11 +93,21 @@ module.exports = {
     var collection = db.collection(collection_name);
 
     if(filter === undefined) {
-      filter = {};
+      filter = {
+        deleted_on: {
+          $eq: null
+        }
+      };
+    }
+    else if(filter.deleted_on === undefined) {
+      filter.deleted_on = {
+        $eq: null
+      }
     }
 
     for(var property in filter) {
-      if(property.endsWith("_id")) {
+      if(property.endsWith("_id")
+         && object[property] !== null && object[property] !== undefined) {
         try {
           filter[property] = ObjectID(filter[property]);
         }
@@ -130,7 +142,8 @@ module.exports = {
     var collection = db.collection(collection_name);
 
     for(var property in object) {
-      if(property.endsWith("_id")) {
+      if(property.endsWith("_id")
+         && object[property] !== null && object[property !== undefined]) {
         try {
           object[property] = ObjectID(object[property]);
         }
