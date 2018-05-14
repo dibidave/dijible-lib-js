@@ -86,7 +86,8 @@ module.exports = {
     return promise;
   },
 
-  get_objects: function(user_id, collection_name, filter) {
+  get_objects: function(user_id, collection_name, filter,
+    sorted_by) {
 
     var db = get_db(user_id);
 
@@ -105,6 +106,23 @@ module.exports = {
       }
     }
 
+    var options = {}
+
+    if(sorted_by !== undefined) {
+      var sort_fields = [];
+      for(var sort_field in sorted_by) {
+        var is_ascending = sorted_by[sort_field];
+        if(is_ascending) {
+          sort_fields.push([sort_field, "asc"]);
+        }
+        else {
+          sort_fields.push([sort_field, "desc"]);
+        }
+      }
+
+      options["sort"] = sort_fields;
+    }
+
     for(var property in filter) {
       if(property.endsWith("_id")
          && object[property] !== null && object[property] !== undefined) {
@@ -117,7 +135,7 @@ module.exports = {
       }
     }
 
-    var promise = collection.find(filter).toArray();
+    var promise = collection.find(filter, options).toArray();
 
     return promise;
   },
