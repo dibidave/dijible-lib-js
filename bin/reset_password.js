@@ -1,4 +1,4 @@
-var logger = require("../util/logger").init_logger("reset_password");
+var logger = require("../util/Logger").init_logger("reset_password");
 var database = require("../connectors/database");
 var User = require("../User");
 
