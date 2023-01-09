@@ -36,11 +36,11 @@ const Database_Object = {
     
     for(var property in this) {
 
-      if(typeof this[property] === 'function') {
+      if(typeof this[property] === "function") {
         continue;
       }
 
-      if(property === '_metadata') {
+      if(property === "_metadata") {
         continue;
       }
 
